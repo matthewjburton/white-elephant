@@ -61,7 +61,7 @@ def settings():
     elif response == 'n':
         settings()
 
-#
+#stores the list of names for all players participating in the gift exchange
 def names(numberOfPlayers):
     print("Enter each player's name on a separate line")
     
@@ -72,6 +72,7 @@ def names(numberOfPlayers):
     
     return players
 
+#shuffles the order of the names in a random order
 def turnOrder(players):
     for name in players:
         index = players.index(name)
@@ -87,8 +88,8 @@ def turnOrder(players):
     for name in players:
         print(str(players.index(name) +  1) + ". " + players[players.index(name)])
 
+#controls the turns for each player and prompts the user with their options
 def play(players, numberOfSteals):
-    #tracks the number of times a gift has been stolen
     stealTracker = []
     for x in players:
         stealTracker.append(0)
@@ -109,12 +110,12 @@ def play(players, numberOfSteals):
                 i = 1
                 for index in range(players.index(name)):
                     if (stealTracker[index] < numberOfSteals):
-                        print(str(i) + ". " + players[index])
+                        print(str(i) + ". " + players[index] + "'s gift can be stolen " + str(numberOfSteals - stealTracker[index]) + " more times")
                         i += 1
                 #the user is prompted to select a target to steal from or to cancel and open a gift instead
                 choice = 0
                 while (choice < 1 or choice > len(players)):
-                    choice = int(input("Enter the player's number you want to steal from or press ENTER to cancel and open a gift instead: "))
+                    choice = int(input("Enter the player's NUMBER you want to steal from or press ENTER to cancel and open a gift instead: "))
                 if choice == '':
                     response = 'n'
                 else:
@@ -124,7 +125,7 @@ def play(players, numberOfSteals):
         if response != 'y':
             print("Open a gift.")
             input("press ENTER to continue")
-        print("\n")
+        print("")
 
     #the first player goes again
     print(players[0] + ", it's the final turn.")
@@ -132,11 +133,24 @@ def play(players, numberOfSteals):
     while (response != 'y' and response != 'n'):
         response = input("\nWould you like to steal a gift? y/n\n")
     if response == 'y':
+        #the list of players who have a gift are listed
         print("You can steal from:")
-        for index in range(1, len(players)):
-            print(players[index]);
+        i = 1
+        for index in range(1, players.index(name)):
+            if (stealTracker[index] < numberOfSteals):
+                print(str(i) + ". " + players[index] + "'s gift can be stolen " + str(numberOfSteals - stealTracker[index]) + " more times")
+                i += 1
+        #the user is prompted to select a target to steal from or to cancel and open a gift instead
+        choice = 0
+        while (choice < 1 or choice > len(players)):
+            choice = int(input("Enter the player's NUMBER you want to steal from or press ENTER to cancel and open a gift instead: "))
+        if choice == '':
+            response = 'n'
+        else:
+            stealTracker[players.index(name)] = stealTracker[choice - 1] + 1
+            stealTracker[choice - 1] = 0
     elif response == 'n':
         return
-        
+
 if __name__ == "__main__":
     main()
